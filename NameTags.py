@@ -2,6 +2,8 @@ from pathlib import Path
 import csv
 import pprint
 import os
+label_width = "335px"
+label_height = "230px"
 
 raw = [line for line in
         next(Path().glob("*.csv")).read_text().splitlines()
@@ -12,37 +14,37 @@ with open("Attendees.txt", 'w') as attendees:
         last, first = rec.split('|')
         attendees.write(f"{n + 1} {first} {last}\n")
 
-name_tags_table_begin = """
+name_tags_table_begin = f"""
 <style>
-  .nameTags {
+  .nameTags {{
     border-collapse:collapse;
     padding:5px;
-  }
-  .nameTags td {
+  }}
+  .nameTags td {{
     padding:5px;
-  }
-  .oneTag {
-    border-spacing:10px;
-  }
-  .oneTag td {
-    width:250px;
-    height:150px;
-    background-image: url(WinterTechForumBanner.png);
-    background-size: 100% 35%;
-    background-repeat: no-repeat;
-    background-position: 0px 0px;
-    border:1px solid #000000;
-  }
-  h1, h3 {
+  }}
+  .oneTag {{
+    border-spacing:0;
+    margin-bottom:5px;
+  }}
+  .oneTag td {{
+    width:{label_width};
+    height:{label_height};
+    border-bottom:1px solid #000000;
+  }}
+  h1, h3 {{
     font-family: Sans-Serif;
     text-align: center;
     padding: 0;
     margin: 0;
-  }
-  h1 {
-    padding-top: 40px;
-    font-size: 3em;
-  }
+  }}
+  h1 {{
+    padding-top: 0;
+    font-size: 4.5em;
+  }}
+  .pageBreak {{
+      page-break-before: always;
+  }}
 </style>
 <table class="nameTags">
   <tbody>
@@ -53,8 +55,12 @@ def name_tag_row(first, last):
   <table class="oneTag">
     <tbody>
       <tr>
-        <td><h1>{first}</h1><h3>{last}</h3></td>
-        <td><h1>{first}</h1><h3>{last}</h3></td>
+        <td>
+        <img src="WinterTechForumBanner.png" align="top" width="{label_width}">
+        <h1>{first}</h1><h3>{last}</h3></td>
+        <td>
+        <img src="WinterTechForumBanner.png" align="top" width="{label_width}">
+        <h1>{first}</h1><h3>{last}</h3></td>
       </tr>
     <tbody>
   </table>
@@ -71,6 +77,8 @@ with open("NameTags.html", 'w') as name_tags:
     for n, rec in enumerate(sorted(records)):
         last, first = rec.split('|')
         name_tags.write(f"{name_tag_row(first, last)}")
+        if (n+1) % 4 == 0:
+            name_tags.write('<div class = "pageBreak">\n')
     name_tags.write(f"{name_tags_table_end}")
 
 os.system("subl NameTags.html")

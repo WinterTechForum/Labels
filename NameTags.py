@@ -6,13 +6,20 @@ label_width = 335
 label_height = 230
 
 raw = [line for line in
-        next(Path().glob("*.csv")).read_text().splitlines()
+        next(Path().glob("tito-*.csv")).read_text().splitlines()
         if "Unique Ticket URL" not in line]
 records = { f"{row[6]}|{row[5]}" for row in csv.reader(raw) }
 with open("Attendees.txt", 'w') as attendees:
     for n, rec in enumerate(sorted(records)):
         last, first = rec.split('|')
         attendees.write(f"{n + 1} {first} {last}\n")
+
+raw_interests = [
+  line for line in Path("Interests.csv").read_text().splitlines()
+]
+interests = { row[0]: row[1] for row in csv.reader(raw_interests) }
+# pprint.pprint(interests)
+
 
 name_tags_table_begin = f"""
 <style>
@@ -59,17 +66,17 @@ name_tags_table_begin = f"""
   <tbody>
 """
 
-def name_tag_row(first, last):
+def name_tag_row(first, last, interests):
   return f"""
   <table class="oneTag">
     <tbody>
       <tr>
         <td>
         <img src="WinterTechForumBanner.png">
-        <h1>{first}</h1><h3>{last}</h3></td>
+        <h1>{first}</h1><h3>{last}. {interests}</h3></td>
         <td>
         <img src="WinterTechForumBanner.png">
-        <h1>{first}</h1><h3>{last}</h3></td>
+        <h1>{first}</h1><h3>{last}. {interests}</h3></td>
       </tr>
     <tbody>
   </table>
@@ -85,7 +92,14 @@ with open("NameTags.html", 'w') as name_tags:
     name_tags.write(f"{name_tags_table_begin}")
     for n, rec in enumerate(sorted(records)):
         last, first = rec.split('|')
-        name_tags.write(f"{name_tag_row(first, last)}")
+        full_name = f"{first} {last}"
+        # attendee_interests = ""
+        # if full_name not in interests:
+        #     print(f"{full_name} not in interests")
+        # if interests[full_name]:
+        #     print(f"{full_name}: {interests[full_name]}")
+            # attendee_interests = interests[full_name]
+        name_tags.write(f"{name_tag_row(first, last, interests[f'{first} {last}'])}")
         if (n+1) % 4 == 0:
             name_tags.write('<div class = "pageBreak">\n')
     name_tags.write(f"{name_tags_table_end}")

@@ -2,8 +2,8 @@ from pathlib import Path
 import csv
 import pprint
 import os
-label_width = "335px"
-label_height = "230px"
+label_width = 335
+label_height = 230
 
 raw = [line for line in
         next(Path().glob("*.csv")).read_text().splitlines()
@@ -28,19 +28,28 @@ name_tags_table_begin = f"""
     margin-bottom:5px;
   }}
   .oneTag td {{
-    width:{label_width};
-    height:{label_height};
+    width:{label_width}px;
+    height:{label_height}px;
     border-bottom:1px solid #000000;
   }}
   h1, h3 {{
     font-family: Sans-Serif;
-    text-align: center;
-    padding: 0;
+    line-height: 100%;
+    padding-left: 10px;
+    padding-top: 0;
     margin: 0;
+    text-align: left;
   }}
   h1 {{
-    padding-top: 0;
     font-size: 4.5em;
+    margin-bottom: 5px;
+  }}
+  h3 {{
+  }}
+  img {{
+    vertical-align: top;
+    height: 70px;
+    width: 100%;
   }}
   .pageBreak {{
       page-break-before: always;
@@ -56,10 +65,10 @@ def name_tag_row(first, last):
     <tbody>
       <tr>
         <td>
-        <img src="WinterTechForumBanner.png" align="top" width="{label_width}">
+        <img src="WinterTechForumBanner.png">
         <h1>{first}</h1><h3>{last}</h3></td>
         <td>
-        <img src="WinterTechForumBanner.png" align="top" width="{label_width}">
+        <img src="WinterTechForumBanner.png">
         <h1>{first}</h1><h3>{last}</h3></td>
       </tr>
     <tbody>

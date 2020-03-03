@@ -1,3 +1,6 @@
+# Using a plain source file containing nothing but the first
+# and last names on each line of Attendees.txt
+
 from pathlib import Path
 import csv
 import pprint

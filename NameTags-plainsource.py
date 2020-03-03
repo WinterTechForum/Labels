@@ -1,27 +1,13 @@
 # Using a plain source file containing nothing but the first
 # and last names on each line of Attendees.txt
-
 from pathlib import Path
 import csv
 import pprint
 import os
 import sys
+source = Path(r"C:\Users\Bruce\Google Drive\____WTF2020\Attendees.txt")
 label_width = 335
 label_height = 230
-
-raw = [line for line in
-        next(Path().glob("*-WTF.csv")).read_text().splitlines()
-        if "Timestamp" not in line]
-records = { f"{row[7]}" for row in csv.reader(raw) }
-pprint.pprint(records)
-
-with open("Attendees.txt", 'w') as attendees:
-    for n, rec in enumerate(sorted(records)):
-        first, last = rec.split(' ')
-        print(first, last)
-        attendees.write(f"{n + 1} {first} {last}\n")
-
-#sys.exit()
 
 name_tags_table_begin = f"""
 <style>
@@ -90,9 +76,14 @@ name_tags_table_end = """
 </table>
 """
 
+input = ''.join([i if ord(i) < 128 else '' for i in source.read_text(encoding="utf8")])
+lines = input.strip().splitlines()
+pprint.pprint(lines)
+# sys.exit()
+
 with open("NameTags.html", 'w') as name_tags:
     name_tags.write(f"{name_tags_table_begin}")
-    for n, rec in enumerate(sorted(records)):
+    for n, rec in enumerate(lines):
         first, last = rec.split(' ')
         full_name = f"{first} {last}"
         name_tags.write(f"{name_tag_row(first, last)}")

@@ -84,7 +84,7 @@ pprint.pprint(lines)
 with open("NameTags.html", 'w') as name_tags:
     name_tags.write(f"{name_tags_table_begin}")
     for n, rec in enumerate(lines):
-        first, last = rec.split(' ')
+        first, last = rec.split(' ', maxsplit=1)
         full_name = f"{first} {last}"
         name_tags.write(f"{name_tag_row(first, last)}")
         if (n+1) % 4 == 0:
